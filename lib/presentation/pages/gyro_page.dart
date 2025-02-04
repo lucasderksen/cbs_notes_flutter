@@ -1,3 +1,4 @@
+import 'package:cbs_notes_flutter/presentation/widgets/back_button.dart';
 import 'package:flutter/material.dart';
 import '../widgets/gyro_parallax.dart';
 
@@ -21,6 +22,8 @@ class _GyroPageState extends State<GyroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: AppBackButton(),
+        leadingWidth: 60,
         title: Padding(
             padding: const EdgeInsets.fromLTRB(6.0, 12, 6, 12),
             child: Text(

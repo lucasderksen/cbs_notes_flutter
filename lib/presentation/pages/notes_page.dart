@@ -1,4 +1,3 @@
-import 'package:cbs_notes_flutter/presentation/pages/gyro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/notes_bloc.dart';
@@ -6,8 +5,6 @@ import '../../bloc/notes_event.dart';
 import '../../bloc/notes_state.dart';
 import '../../data/models/note.dart';
 import '../widgets/note_card.dart';
-import 'notes_detail_page.dart';
-import 'notes_edit_page.dart';
 import 'package:uuid/uuid.dart';
 
 class NotesPage extends StatefulWidget {
@@ -32,18 +29,13 @@ class _NotesPageState extends State<NotesPage> {
     return Scaffold(
       appBar: AppBar(
         title: Padding(
-          padding: const EdgeInsets.fromLTRB(6.0, 12, 6, 12),
+          padding: const EdgeInsets.fromLTRB(2, 12, 2, 12),
           child: Row(
             children: [
               if (!_isSearching)
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const GyroPage(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, '/gyro');
                   },
                   child: const Text(
                     'Notes',
@@ -223,18 +215,16 @@ class _NotesPageState extends State<NotesPage> {
 
   Future<void> _navigateToDetail(Note note) async {
     if (note.title.isEmpty && note.content.isEmpty) {
-      await Navigator.push(
+      await Navigator.pushNamed(
         context,
-        MaterialPageRoute(
-          builder: (context) => NotesEditPage(note: note),
-        ),
+        '/edit',
+        arguments: note,
       );
     } else {
-      await Navigator.push(
+      await Navigator.pushNamed(
         context,
-        MaterialPageRoute(
-          builder: (context) => NotesDetailPage(note: note),
-        ),
+        '/detail',
+        arguments: note,
       );
     }
 

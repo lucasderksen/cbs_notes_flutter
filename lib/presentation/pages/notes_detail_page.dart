@@ -1,9 +1,10 @@
+import 'package:cbs_notes_flutter/presentation/widgets/back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import '../../bloc/notes_bloc.dart';
 import '../../bloc/notes_event.dart';
 import '../../data/models/note.dart';
-import 'notes_edit_page.dart';
 
 class NotesDetailPage extends StatelessWidget {
   final Note note;
@@ -14,20 +15,47 @@ class NotesDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: AppBackButton(),
+        leadingWidth: 60,
         title: Text(note.title.isEmpty ? 'Note' : note.title),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () => _navigateToEdit(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => _showDeleteDialog(context),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Row(
+              children: [
+                IconButton.filled(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(const Color(0xFF3D3D3D)),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  icon: const Icon(Icons.edit),
+                  onPressed: () => _navigateToEdit(context),
+                ),
+                IconButton.filled(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        WidgetStateProperty.all(const Color(0xFF3D3D3D)),
+                    shape: WidgetStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => _showDeleteDialog(context),
+                ),
+              ],
+            ),
           ),
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -39,8 +67,16 @@ class NotesDetailPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
             ],
+            Text(
+              DateFormat('dd MMM, yyyy - HH:mm').format(note.createdAt),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 12),
             Text(
               note.content,
               style: const TextStyle(fontSize: 16),
@@ -52,11 +88,10 @@ class NotesDetailPage extends StatelessWidget {
   }
 
   Future<void> _navigateToEdit(BuildContext context) async {
-    await Navigator.push(
+    await Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => NotesEditPage(note: note),
-      ),
+      '/edit',
+      arguments: note,
     );
 
     if (!context.mounted) return;

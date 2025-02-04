@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/notes_bloc.dart';
 import 'bloc/notes_event.dart';
+import 'data/models/note.dart';
 import 'data/repositories/note_repository.dart';
 import 'presentation/pages/notes_page.dart';
+import 'presentation/pages/notes_detail_page.dart';
+import 'presentation/pages/notes_edit_page.dart';
+import 'presentation/pages/gyro_page.dart';
 import 'services/gyro_service.dart';
 
 class AppConfig {
   static const String appTitle = 'Notes App';
 
-  static const Color primaryColor = Colors.blue;
   static const double defaultElevation = 2.0;
   static const double noElevation = 0.0;
 }
@@ -56,7 +59,36 @@ class MyApp extends StatelessWidget {
           title: AppConfig.appTitle,
           debugShowCheckedModeBanner: false,
           theme: _buildAppTheme(),
-          home: const NotesPage(),
+          initialRoute: '/',
+          onGenerateRoute: (settings) {
+            if (settings.name == '/') {
+              return MaterialPageRoute(
+                builder: (context) => const NotesPage(),
+              );
+            }
+            
+            if (settings.name == '/detail') {
+              final note = settings.arguments as Note;
+              return MaterialPageRoute(
+                builder: (context) => NotesDetailPage(note: note),
+              );
+            }
+            
+            if (settings.name == '/edit') {
+              final note = settings.arguments as Note;
+              return MaterialPageRoute(
+                builder: (context) => NotesEditPage(note: note),
+              );
+            }
+
+            if (settings.name == '/gyro') {
+              return MaterialPageRoute(
+                builder: (context) => const GyroPage(),
+              );
+            }
+            
+            return null;
+          },
         ),
       ),
     );
