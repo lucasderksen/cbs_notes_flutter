@@ -146,6 +146,6 @@ class _NotesEditPageState extends State<NotesEditPage> {
       context.read<NotesBloc>().add(UpdateNote(updatedNote));
     }
 
-    Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 }
